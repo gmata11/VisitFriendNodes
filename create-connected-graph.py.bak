@@ -1,0 +1,16 @@
+#!/usr/bin/env python
+
+import sys, random
+from networkx import *
+
+if len( sys.argv ) < 2 :
+    sys.exit( 'usage: num-vertexes density' )
+
+num_vertexes = int( sys.argv[1] )
+density = float( sys.argv[2] )
+
+edges = connected_watts_strogatz_graph( num_vertexes, 4, density, seed=random.random()).edges()
+
+print 'p edge ' + str( num_vertexes ) + ' '  + str( len( edges ) )
+for edge in  edges :
+    print 'e ' + str( edge[0]+1 ) + ' ' + str( edge[1]+1 )

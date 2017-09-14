@@ -1,0 +1,40 @@
+#!/usr/bin/env python
+
+import sys, itertools
+
+def get_solution( filename ) :
+   f = open( filename )
+   return list(map( int, f.readline().split() ))
+
+def get_graph( filename ) :
+   fitxer = open( filename ) 
+   nodes = int( fitxer.readline().split()[2] )
+   g = [ [] for _ in range( nodes+1 ) ]
+   for line in fitxer :
+      u, v = list(map( int, line.split()[1:3] ))
+      g[ u ].append( v )
+      g[ v ].append( u )
+   return g
+
+def check_solution( graph, solution ) :
+   for x in solution :
+      for n in graph[x] :
+         if n in solution : return False
+   return True
+
+def ignota( filename ) :
+   g = get_graph( sys.argv[1] )
+   nodes = len( g )
+   for s in range( nodes-1, 0, -1 ) :
+      solutions = itertools.combinations( list(range( 1, nodes)), s )
+      for solution in solutions :
+         if check_solution( g, solution ) :
+            return solution
+   print("No solution found")
+   return -1
+
+graph = get_graph( sys.argv[1] )
+solution = get_solution( sys.argv[2] )
+solution2 = ignota( sys.argv[1] )
+print(check_solution( graph, solution ) and len( solution ) == len( solution2 ))
+
